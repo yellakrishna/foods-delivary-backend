@@ -12,7 +12,7 @@ const app = express()
 const port = process.env.PORT || 4000;
 
 app.use(cors({
-    origin:"*",
+    origin:"https://fish-delivery-frontend.vercel.app",
     credentials:true
 }))
 
