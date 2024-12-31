@@ -11,30 +11,30 @@ import orderRouter from "./routes/orderRoute.js"
 const app = express()
 const port = process.env.PORT || 4000;
 
-app.use(cors({
-    origin:"https://fish-delivery-frontend.vercel.app",
-    credentials:true
-}))
+// app.use(cors({
+//     origin:"https://fish-delivery-frontend.vercel.app",
+//     credentials:true
+// }))
 
 // middlewares
 app.use(express.json())
 
-// const allowedOrigins = [
-//     "https://online-delivery-frontend.vercel.app",
-//     "https://online-delivery-admin.vercel.app"
-// ];
+const allowedOrigins = [
+    "https://fish-delivery-frontend.vercel.app",
+    "https://fish-delivery-frontend-admin.vercel.app"
+];
 
-// app.use(cors({
-//     origin: function (origin, callback) {
-//         if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-//             callback(null, true);
-//         } else {
-//             callback(new Error("Not allowed by CORS"));
-//         }
-//     },
-//     methods: ["POST", "GET", "PUT", "DELETE"],
-//     credentials: true
-// }));
+app.use(cors({
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+            callback(null, true);
+        } else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
+    methods: ["POST", "GET", "PUT", "DELETE"],
+    credentials: true
+}));
 
 // db connection
 connectDB()
