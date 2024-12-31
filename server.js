@@ -20,7 +20,7 @@ const port = process.env.PORT || 4000;
 app.use(express.json())
 
 const allowedOrigins = [
-    "https://fish-delivery-frontend.vercel.app",
+    "https://frontend-fish-delivery.vercel.app",
     "https://fish-delivery-frontend-admin.vercel.app"
 ];
 
