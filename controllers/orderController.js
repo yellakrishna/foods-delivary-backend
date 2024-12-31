@@ -38,8 +38,8 @@ const placeOrder = async (req, res) => {
         })
         
           const session = await stripe.checkout.sessions.create({
-            success_url: `https://food-delivery-website-gamma.vercel.app/verify?success=true&orderId=${newOrder._id}`,
-            cancel_url: `https://food-delivery-website-gamma.vercel.app/verify?success=false&orderId=${newOrder._id}`,
+            success_url: `https://frontend-fish-delivery.vercel.app/verify?success=true&orderId=${newOrder._id}`,
+            cancel_url: `https://frontend-fish-delivery.vercel.app/verify?success=false&orderId=${newOrder._id}`,
             line_items: line_items,
             mode: 'payment',
           });
