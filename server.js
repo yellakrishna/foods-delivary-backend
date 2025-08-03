@@ -24,13 +24,12 @@ const PORT = process.env.PORT || 4000;
 
 // ✅ Database Connection
 connectDB();
-
 // ✅ CORS Configuration
 const allowedOrigins = [
-  "http://localhost:5173", // User frontend local
-  "http://localhost:5174", // Admin frontend local
-  "https://delivery-frontend.onrender.com", // User frontend deployed
-  "https://new-admin.onrender.com" // Admin frontend deployed
+   // local admin frontend
+  "https://frontend-fish-delivery.vercel.app", // Vercel user frontend
+  "https://new-admin-gray.vercel.app", // Vercel admin frontend
+ // Render admin frontend
 ];
 
 app.use(
