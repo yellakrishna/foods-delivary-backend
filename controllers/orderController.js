@@ -90,11 +90,16 @@ const listOrders = async (req, res) => {
   }
 };
 
-// 👤 User - List Own Orders
+
 const userOrders = async (req, res) => {
   try {
-    const { userId } = req.body;
-    const orders = await orderModel.find({ userId });
+    const userId = req.user.id || req.user.userId || req.user._id; // ✅ covers all cases
+    if (!userId) {
+      return res.status(400).json({ success: false, message: "User ID not found" });
+    }
+
+    const orders = await orderModel.find({ userId }).sort({ createdAt: -1 });
+
     res.status(200).json({ success: true, data: orders });
   } catch (error) {
     console.error("❌ User Orders Error:", error.message);
