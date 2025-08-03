@@ -29,8 +29,8 @@ connectDB();
 const allowedOrigins = [
   "http://localhost:5173", // User frontend
   "http://localhost:5174", // Admin frontend
-  "https://frontend-fish-delivery.vercel.app",
-  "https://fish-delivery-frontend-admin.vercel.app"
+  "https://frontend-fish-delivery.vercel.app/",
+  "https://new-admin-gray.vercel.app/"
 ];
 
 app.use(cors({
