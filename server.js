@@ -27,23 +27,27 @@ connectDB();
 
 // ✅ CORS Configuration
 const allowedOrigins = [
-  "http://localhost:5173", // User frontend
-  "http://localhost:5174", // Admin frontend
-  "https://frontend-fish-delivery.vercel.app/",
-  "https://new-admin-gray.vercel.app/"
+  "http://localhost:5173", // User frontend local
+  "http://localhost:5174", // Admin frontend local
+  "https://delivery-frontend.onrender.com", // User frontend deployed
+  "https://new-admin.onrender.com" // Admin frontend deployed
 ];
 
-app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("CORS not allowed"));
-    }
-  },
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE"]
-}));
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        console.log("❌ CORS blocked for:", origin);
+        callback(new Error("CORS not allowed"));
+      }
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"]
+  })
+);
+
 
 // ✅ Middleware
 app.use(express.json());
