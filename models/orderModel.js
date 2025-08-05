@@ -13,25 +13,26 @@ const orderSchema = new mongoose.Schema(
     ],
     amount: { type: Number, required: true },
     address: { type: Object, required: true },
-    status: { type: String, default: "Placed" },
+
+    // ✅ Status (single definition)
+    status: {
+      type: String,
+      enum: ["Pending", "Confirmed", "Delivered", "Cancelled"],
+      default: "Pending",
+    },
+
+    // ✅ Payment method & status
     paymentMode: {
-  type: String,
-  enum: ["online", "cod"],
-  required: true,
-},
-payment: {
-  type: Boolean,
-  default: false,
-},
-status: {
-  type: String,
-  enum: ["Pending", "Confirmed", "Delivered", "Cancelled"],
-  default: "Pending",
-},
-
-
+      type: String,
+      enum: ["online", "cod"],
+      required: true,
+    },
+    payment: {
+      type: Boolean,
+      default: false,
+    },
   },
-  { timestamps: true }
+  { timestamps: true } // ✅ createdAt & updatedAt will be added automatically
 );
 
 export default mongoose.model("orders", orderSchema);
