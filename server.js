@@ -27,8 +27,8 @@ connectDB();
 
 
 const allowedOrigins = [
-  "http://localhost:5173", // User frontend
-  "http://localhost:5174", // Admin frontend
+  // "http://localhost:5173", // User frontend
+  // "http://localhost:5174", // Admin frontend
   "https://new-online-delivery-frontend.vercel.app",
   "https://new-admin-gray.vercel.app"
 ];
