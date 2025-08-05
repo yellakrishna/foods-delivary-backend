@@ -20,7 +20,7 @@ dotenv.config();
 
 // App Config
 const app = express();
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 5000;
 
 // ✅ Database Connection
 connectDB();
@@ -29,7 +29,7 @@ connectDB();
 const allowedOrigins = [
   "http://localhost:5173", // User frontend
   "http://localhost:5174", // Admin frontend
-  "https://frontend-fish-delivery.vercel.app",
+  "https://new-online-delivery-frontend.vercel.app",
   "https://new-admin-gray.vercel.app"
 ];
 
