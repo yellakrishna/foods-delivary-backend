@@ -4,15 +4,26 @@ import cloudinary from "../config/cloudinary.js";
 import streamifier from "streamifier";
 
 // ✅ List all food
+// ✅ List all food
 const listFood = async (req, res) => {
   try {
     const foods = await foodModel.find({});
-    res.json({ success: true, data: foods });
+
+    // ✅ Return image exactly as stored (Cloudinary URL or local filename)
+    const updatedFoods = foods.map(food => ({
+      ...food._doc,
+      image: food.image?.startsWith("http")
+        ? food.image // Cloudinary full URL
+        : `${req.protocol}://${req.get("host")}/images/${food.image}` // Local image
+    }));
+
+    res.json({ success: true, data: updatedFoods });
   } catch (error) {
     console.error(error);
     res.json({ success: false, message: "Error" });
   }
 };
+
 
 // ✅ Add food (upload to Cloudinary from memory)
 const addFood = async (req, res) => {
