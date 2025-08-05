@@ -35,9 +35,8 @@ const listFood = async (req, res) => {
 // ✅ Add food (upload to Cloudinary from memory)
 const addFood = async (req, res) => {
   try {
-    // Validate image file
-    if (!req.file || !req.file.mimetype.startsWith("image/")) {
-      return res.json({ success: false, message: "Please upload a valid image file" });
+    if (!req.file) {
+      return res.json({ success: false, message: "Image file is required" });
     }
 
     // Upload buffer to Cloudinary
@@ -56,24 +55,23 @@ const addFood = async (req, res) => {
 
     const result = await streamUpload(req.file.buffer);
 
-    // Save to MongoDB with correct data types
+    // Save to MongoDB
     const food = new foodModel({
       name: req.body.name,
       description: req.body.description,
-      price: Number(req.body.price), // ✅ ensure number
+      price: req.body.price,
       category: req.body.category,
-      image: result.secure_url // ✅ full Cloudinary URL
+      image: result.secure_url // Cloudinary URL
     });
 
     await food.save();
 
     res.json({ success: true, message: "Food Added" });
   } catch (error) {
-    console.error("❌ Error adding food:", error);
+    console.error(error);
     res.json({ success: false, message: "Error adding food" });
   }
 };
-
 
 // ✅ Remove food
 const removeFood = async (req, res) => {
