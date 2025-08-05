@@ -1,54 +1,69 @@
+// controllers/foodController.js
 import foodModel from "../models/foodModel.js";
-import fs from 'fs'
+import cloudinary from "../config/cloudinary.js";
+import streamifier from "streamifier";
 
-// all food list
+// ✅ List all food
 const listFood = async (req, res) => {
-    try {
-        const foods = await foodModel.find({})
-        res.json({ success: true, data: foods })
-    } catch (error) {
-        console.log(error);
-        res.json({ success: false, message: "Error" })
-    }
+  try {
+    const foods = await foodModel.find({});
+    res.json({ success: true, data: foods });
+  } catch (error) {
+    console.error(error);
+    res.json({ success: false, message: "Error" });
+  }
+};
 
-}
-
-// add food
+// ✅ Add food (upload to Cloudinary from memory)
 const addFood = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.json({ success: false, message: "Image file is required" });
+    }
 
-    let image_filename = `${req.file.filename}`
+    // Upload buffer to Cloudinary
+    const streamUpload = (buffer) => {
+      return new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          { folder: "fish-delivery" },
+          (error, result) => {
+            if (result) resolve(result);
+            else reject(error);
+          }
+        );
+        streamifier.createReadStream(buffer).pipe(stream);
+      });
+    };
 
+    const result = await streamUpload(req.file.buffer);
+
+    // Save to MongoDB
     const food = new foodModel({
-        name: req.body.name,
-        description: req.body.description,
-        price: req.body.price,
-        category:req.body.category,
-        image: image_filename,
-    })
-    try {
-        await food.save();
-        res.json({ success: true, message: "Food Added" })
-    } catch (error) {
-        console.log(error);
-        res.json({ success: false, message: "Error" })
-    }
-}
+      name: req.body.name,
+      description: req.body.description,
+      price: req.body.price,
+      category: req.body.category,
+      image: result.secure_url // Cloudinary URL
+    });
 
-// delete food
+    await food.save();
+
+    res.json({ success: true, message: "Food Added" });
+  } catch (error) {
+    console.error(error);
+    res.json({ success: false, message: "Error adding food" });
+  }
+};
+
+// ✅ Remove food
 const removeFood = async (req, res) => {
-    try {
+  try {
+    await foodModel.findByIdAndDelete(req.body.id);
+    res.json({ success: true, message: "Food Removed" });
+  } catch (error) {
+    console.error(error);
+    res.json({ success: false, message: "Error removing food" });
+  }
+};
 
-        const food = await foodModel.findById(req.body.id);
-        fs.unlink(`uploads/${food.image}`, () => { })
-
-        await foodModel.findByIdAndDelete(req.body.id)
-        res.json({ success: true, message: "Food Removed" })
-
-    } catch (error) {
-        console.log(error);
-        res.json({ success: false, message: "Error" })
-    }
-
-}
-
-export { listFood, addFood, removeFood }
+export { listFood, addFood, removeFood };

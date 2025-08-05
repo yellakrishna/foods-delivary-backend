@@ -24,28 +24,32 @@ const PORT = process.env.PORT || 4000;
 
 // ✅ Database Connection
 connectDB();
-// ✅ CORS Configuration
+
+
 const allowedOrigins = [
-   // local admin frontend
-  "https://frontend-fish-delivery.vercel.app", // Vercel user frontend
-  "https://new-admin-gray.vercel.app", // Vercel admin frontend
- // Render admin frontend
+  "http://localhost:5173", // User frontend
+  "http://localhost:5174", // Admin frontend
+  "https://frontend-fish-delivery.vercel.app",
+  "https://new-admin-gray.vercel.app"
 ];
 
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        console.log("❌ CORS blocked for:", origin);
-        callback(new Error("CORS not allowed"));
-      }
-    },
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE"]
-  })
-);
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      console.error("❌ CORS blocked for:", origin);
+      callback(new Error("CORS not allowed"));
+    }
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
+
+// ✅ Allow preflight requests for all routes
+app.options("*", cors());
+
 
 
 // ✅ Middleware
@@ -57,6 +61,9 @@ app.use("/api/user", userRouter);
 app.use("/api/food", foodRouter);
 app.use("/api/cart", cartRouter);
 app.use("/api/order", orderRouter);
+
+app.use("/images", express.static("uploads"));
+
 // app.use('/api/admin', adminRoutes);
 // app.use('/api/setting', settingRoutes);
 // ✅ Default Route
