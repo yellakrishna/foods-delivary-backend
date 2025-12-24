@@ -55,14 +55,22 @@ const addFood = async (req, res) => {
     };
 
     const result = await streamUpload(req.file.buffer);
+    
 
     // Save to MongoDB with correct data types
     const food = new foodModel({
-      name: req.body.name,
-      description: req.body.description,
-      price: Number(req.body.price), // ✅ ensure number
+      
+       // ✅ ensure number
       category: req.body.category,
-      image: result.secure_url // ✅ full Cloudinary URL
+      image: result.secure_url ,// ✅ full Cloudinary URL
+      sno: Number(req.body.sno), // ✅ ensure number
+      date: new Date(req.body.date), // ✅ ensure date
+      tagNo: req.body.tagNo,
+      plantName: req.body.plantName,
+      reason: req.body.reason,
+      action: req.body.action,
+      remark: req.body.remark,
+
     });
 
     await food.save();

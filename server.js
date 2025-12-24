@@ -20,15 +20,18 @@ dotenv.config();
 
 // App Config
 const app = express();
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 5000;
 
 // ✅ Database Connection
 connectDB();
 
 
 const allowedOrigins = [
- "https://frontend-food-ai.vercel.app",
-"https://admin-food-ai.vercel.app"
+//  "https://frontend-food-ai.vercel.app",
+// "https://admin-food-ai.vercel.app",
+
+"http://localhost:5173",
+"http://localhost:5174"
 ];
 
 app.use(cors({
